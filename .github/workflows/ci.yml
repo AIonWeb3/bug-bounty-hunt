@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+      - name: Run Forge build
+        working-directory: ./contracts
+        run: forge build --sizes
+      - name: Run Forge tests
+        working-directory: ./contracts
+        run: forge test
+
+  api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install API & AI Engine
+        run: |
+          pip install ./packages/ai-engine
+          pip install -r apps/api/requirements.txt
+          pip install pytest pytest-asyncio
+      - name: Run API Tests
+        run: |
+          cd packages/ai-engine
+          pytest
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install and Lint
+        working-directory: ./apps/web
+        run: |
+          npm ci
+          npm run lint
