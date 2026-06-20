@@ -1,0 +1,8 @@
+{
+  "extraPaths": [
+    "packages/ai-engine",
+    "apps/api"
+  ],
+  "pythonVersion": "3.10",
+  "pythonPlatform": "Windows"
+}

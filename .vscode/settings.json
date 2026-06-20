@@ -1,0 +1,29 @@
+{
+  "python.analysis.extraPaths": [
+    "packages/ai-engine"
+  ],
+  "cSpell.words": [
+    "asyncio",
+    "asyncpg",
+    "auditchain",
+    "datefmt",
+    "fastapi",
+    "ipfs",
+    "keccak",
+    "levelname",
+    "mythril",
+    "notset",
+    "pycache",
+    "pydantic",
+    "pytest",
+    "qualname",
+    "reentrancy",
+    "sessionmaker",
+    "sqlalchemy",
+    "uvicorn",
+    "venv",
+    "viem",
+    "wagmi",
+    "wronghash"
+  ]
+}

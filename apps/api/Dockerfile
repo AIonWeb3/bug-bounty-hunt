@@ -5,8 +5,8 @@ WORKDIR /app
 COPY packages/ai-engine /packages/ai-engine
 COPY apps/api/requirements.txt .
 
-RUN pip install /packages/ai-engine
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install /packages/ai-engine && \
+    pip install --no-cache-dir -r requirements.txt
 
 COPY apps/api /app
 

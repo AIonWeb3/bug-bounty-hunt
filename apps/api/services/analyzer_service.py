@@ -1,4 +1,12 @@
+import sys
+from pathlib import Path
 from typing import List
+
+# Add the ai-engine package to the Python path so imports resolve
+_ai_engine_path = str(Path(__file__).resolve().parents[3] / "packages" / "ai-engine")
+if _ai_engine_path not in sys.path:
+    sys.path.insert(0, _ai_engine_path)
+
 from ai_engine.llm_analyzer import LLMAnalyzer
 from ai_engine.static_analyzer import StaticAnalyzer
 from ai_engine.report import merge_findings
@@ -14,3 +22,5 @@ async def analyze_contract(source: str) -> List[Finding]:
     static_findings = await static.analyze(source)
 
     return merge_findings(llm_findings, static_findings)
+
+# End of analyzer service

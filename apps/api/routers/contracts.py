@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from typing import Annotated
 import json
 
 from ..models.models import Contract, Report
@@ -12,8 +13,10 @@ from ..main import get_db
 
 router = APIRouter(prefix="/contracts", tags=["Contracts"])
 
+DbSession = Annotated[AsyncSession, Depends(get_db)]
+
 @router.post("/upload", response_model=ReportResponse)
-async def upload_contract(contract_in: ContractUpload, db: AsyncSession = Depends(get_db)):
+async def upload_contract(contract_in: ContractUpload, db: DbSession):
     # 1. Save contract
     new_contract = Contract(
         uploader_address=contract_in.uploader_address,
@@ -43,8 +46,12 @@ async def upload_contract(contract_in: ContractUpload, db: AsyncSession = Depend
         created_at=new_report.created_at
     )
 
-@router.get("/{id}/report", response_model=ReportResponse)
-async def get_report(id: int, db: AsyncSession = Depends(get_db)):
+@router.get(
+    "/{id}/report",
+    response_model=ReportResponse,
+    responses={404: {"description": "Report not found for the given contract ID"}},
+)
+async def get_report(id: int, db: DbSession):
     result = await db.execute(select(Report).where(Report.contract_id == id))
     report = result.scalars().first()
     if not report:
@@ -56,3 +63,4 @@ async def get_report(id: int, db: AsyncSession = Depends(get_db)):
         findings=json.loads(report.findings_json),
         created_at=report.created_at
     )
+

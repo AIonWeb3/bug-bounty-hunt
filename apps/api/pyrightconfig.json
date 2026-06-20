@@ -1,0 +1,6 @@
+{
+  "extraPaths": [
+    "../../packages/ai-engine"
+  ],
+  "reportMissingModuleSource": false
+}
